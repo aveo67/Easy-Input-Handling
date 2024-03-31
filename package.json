@@ -1,7 +1,7 @@
 {
   "name": "com.aveo67.easyinputhandling",
   "displayName": "Easy Input Handling",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "unity": "2023.1",
   "description": "Tool that simplify building and perform input for new input system",
   "keywords": [
