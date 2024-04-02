@@ -1,3 +1,4 @@
+
 ![GitHub Release](https://img.shields.io/github/v/release/aveo67/Easy-Input-Handling)
 
 # Easy Input Handling
