@@ -9,7 +9,7 @@ namespace EasyInputHandling
 	{
 		private readonly Func<InputAction.CallbackContext, TPayload> _payloadExpression;
 
-		private readonly Action _endAction;
+		private readonly Action<TContext> _endAction;
 
 		private readonly CancellationToken _token;
 
