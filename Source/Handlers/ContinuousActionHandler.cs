@@ -41,7 +41,7 @@ namespace EasyInputHandling
 
 				_isPressed = false;
 
-				_endAction?.Invoke(context);
+				_endAction?.Invoke(_context);
 			}
 		}
 
