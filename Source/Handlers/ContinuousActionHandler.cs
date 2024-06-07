@@ -5,25 +5,29 @@ using UnityEngine.InputSystem;
 
 namespace EasyInputHandling
 {
-	internal class ContinousActionHandler<TPayload, TContext, TActions> : InputActionHandler<Action<TContext, TPayload>, TContext, TActions>
+	internal class ContinuousActionHandler<TPayload, TContext, TActions> : InputActionHandler<Action<TContext, TPayload>, TContext, TActions>
 	{
 		private readonly Func<InputAction.CallbackContext, TPayload> _payloadExpression;
+
+		private readonly Action _endAction;
 
 		private readonly CancellationToken _token;
 
 		private bool _isPressed = false;
 
-		public ContinousActionHandler(
+		public ContinuousActionHandler(
 			Action<TContext, TPayload> expression,
 			Func<TActions, InputAction> targetActionExpression,
 			Func<InputAction.CallbackContext, TPayload> payloadExpression,
 			TContext context,
-			TActions targetinputActionExpression,
+			TActions targetInputActionExpression,
+			Action endAction,
 			CancellationToken token)
-			: base(expression, targetActionExpression, context, targetinputActionExpression)
+			: base(expression, targetActionExpression, context, targetInputActionExpression)
 		{
 			_targetAction.performed += async (c) => await OnPerformed(c);
 			_payloadExpression = payloadExpression;
+			_endAction = endAction;
 			_token = token;
 		}
 
@@ -36,6 +40,8 @@ namespace EasyInputHandling
 				await Loop(context);
 
 				_isPressed = false;
+
+				_endAction?.Invoke();
 			}
 		}
 

@@ -73,14 +73,14 @@ namespace EasyInputHandling
 		}
 
 		/// <summary>
-		/// Добавляет обработку события canseled
+		/// Добавляет обработку события canceled
 		/// </summary>
 		/// <typeparam name="TInputActions">Тип набора событий ввода</typeparam>
 		/// <typeparam name="TContext">Контекст обработки ввода</typeparam>
 		/// <param name="builder">Строитель общего обработчика ввода</param>
 		/// <param name="targetActionExpression">Выражение которое определяет событие ввода которое будет обрабатываться выражением <paramref name="expression"/></param>
 		/// <param name="expression">Выражение которое будет выполнено при целевом событии ввода</param>
-		public static IInputHandlerBuilder<TInputActions, TContext> HandleInputActionCanseled<TInputActions, TContext>(
+		public static IInputHandlerBuilder<TInputActions, TContext> HandleInputActionCanceled<TInputActions, TContext>(
 			this IInputHandlerBuilder<TInputActions, TContext> builder,
 			Func<TInputActions, InputAction> targetActionExpression,
 			Action<TContext> expression)
@@ -96,7 +96,7 @@ namespace EasyInputHandling
 		}
 
 		/// <summary>
-		/// Добавляет обработку события canseled
+		/// Добавляет обработку события canceled
 		/// </summary>
 		/// <typeparam name="TInputActions">Тип набора событий ввода</typeparam>
 		/// <typeparam name="TContext">Контекст обработки ввода</typeparam>
@@ -105,7 +105,7 @@ namespace EasyInputHandling
 		/// <param name="targetActionExpression">Выражение которое определяет событие ввода которое будет обрабатываться выражением <paramref name="expression"/></param>
 		/// <param name="payloadExpression">Выражение которое определяет значение полезной нагрузки</param>
 		/// <param name="expression">Выражение которое будет выполнено при целевом событии ввода</param>
-		public static IInputHandlerBuilder<TInputActions, TContext> HandleInputActionCanseled<TInputActions, TContext, TPayload>(
+		public static IInputHandlerBuilder<TInputActions, TContext> HandleInputActionCanceled<TInputActions, TContext, TPayload>(
 			this IInputHandlerBuilder<TInputActions, TContext> builder,
 			Func<TInputActions, InputAction> targetActionExpression,
 			Func<InputAction.CallbackContext, TPayload> payloadExpression,
@@ -121,18 +121,19 @@ namespace EasyInputHandling
 			return builder;
 		}
 
-		public static IInputHandlerBuilder<TInputActions, TContext> HandleInputContinousAction<TInputActions, TContext, TPayload>(
+		public static IInputHandlerBuilder<TInputActions, TContext> HandleInputContinuousAction<TInputActions, TContext, TPayload>(
 			this IInputHandlerBuilder<TInputActions, TContext> builder,
 			Func<TInputActions, InputAction> targetActionExpression,
 			Func<InputAction.CallbackContext, TPayload> payloadExpression,
 			Action<TContext, TPayload> expression,
+			Action endAction = null,
 			Func<TContext, CancellationToken> tokenExpression = default)
 		{
 			Func<TContext, TInputActions, IInput> exp = (context, actions) =>
 			{
 				var token = tokenExpression?.Invoke(context) ?? default;
 
-				return new ContinousActionHandler<TPayload, TContext, TInputActions>(expression, targetActionExpression, payloadExpression, context, actions, token);
+				return new ContinuousActionHandler<TPayload, TContext, TInputActions>(expression, targetActionExpression, payloadExpression, context, actions, endAction, token);
 			};
 
 			builder.Add(exp);
@@ -140,18 +141,19 @@ namespace EasyInputHandling
 			return builder;
 		}
 
-		public static IInputHandlerBuilder<TInputActions, TContext> HandleInputContinousAction<TInputActions, TContext, TPayload>(
+		public static IInputHandlerBuilder<TInputActions, TContext> HandleInputContinuousAction<TInputActions, TContext, TPayload>(
 			this IInputHandlerBuilder<TInputActions, TContext> builder,
 			Func<TInputActions, InputAction> targetActionExpression,
 			Func<InputAction.CallbackContext, TPayload> payloadExpression,
-			Action<TContext, TPayload> expression)
+			Action<TContext, TPayload> expression,
+			Action endAction = null)
 			where TContext : MonoBehaviour
 		{
 			Func<TContext, TInputActions, IInput> exp = (context, actions) =>
 			{
 				var token = context.destroyCancellationToken;
 
-				return new ContinousActionHandler<TPayload, TContext, TInputActions>(expression, targetActionExpression, payloadExpression, context, actions, token);
+				return new ContinuousActionHandler<TPayload, TContext, TInputActions>(expression, targetActionExpression, payloadExpression, context, actions, endAction, token);
 			};
 
 			builder.Add(exp);
