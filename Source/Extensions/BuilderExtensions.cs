@@ -126,7 +126,7 @@ namespace EasyInputHandling
 			Func<TInputActions, InputAction> targetActionExpression,
 			Func<InputAction.CallbackContext, TPayload> payloadExpression,
 			Action<TContext, TPayload> expression,
-			Action endAction = null,
+			Action<TContext> endAction = null,
 			Func<TContext, CancellationToken> tokenExpression = default)
 		{
 			Func<TContext, TInputActions, IInput> exp = (context, actions) =>
@@ -146,7 +146,7 @@ namespace EasyInputHandling
 			Func<TInputActions, InputAction> targetActionExpression,
 			Func<InputAction.CallbackContext, TPayload> payloadExpression,
 			Action<TContext, TPayload> expression,
-			Action endAction = null)
+			Action<TContext> endAction = null)
 			where TContext : MonoBehaviour
 		{
 			Func<TContext, TInputActions, IInput> exp = (context, actions) =>

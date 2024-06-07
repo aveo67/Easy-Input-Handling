@@ -21,7 +21,7 @@ namespace EasyInputHandling
 			Func<InputAction.CallbackContext, TPayload> payloadExpression,
 			TContext context,
 			TActions targetInputActionExpression,
-			Action endAction,
+			Action<TContext> endAction,
 			CancellationToken token)
 			: base(expression, targetActionExpression, context, targetInputActionExpression)
 		{
@@ -41,7 +41,7 @@ namespace EasyInputHandling
 
 				_isPressed = false;
 
-				_endAction?.Invoke();
+				_endAction?.Invoke(context);
 			}
 		}
 
